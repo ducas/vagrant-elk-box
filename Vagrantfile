@@ -9,7 +9,7 @@ aws_secret_access_key = ENV.fetch("AWS_SECRET_ACCESS_KEY", "changeme")
 aws_key_pair_name     = ENV.fetch("AWS_KEY_PAIR_NAME", "changeme")
 aws_private_key_path  = ENV.fetch("AWS_PRIVATE_KEY_PATH", "changeme")
 aws_region            = ENV.fetch("AWS_REGION", "changeme")
-aws_security_group   = ENV.fetch("AWS_SECURITY_GROUP", "changeme")
+aws_security_group    = ENV.fetch("AWS_SECURITY_GROUP", "changeme")
 aws_subnet_id         = ENV.fetch("AWS_SUBNET_ID", "changeme")
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -43,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.secret_access_key = aws_secret_access_key
     aws.keypair_name = aws_key_pair_name
 
-    aws.ami = "ami-09f4ba33" # ubuntu base image
+    aws.ami = "ami-69631053" # ubuntu base image
     aws.instance_type = "t2.micro" # coz it's free...
 
     aws.region = aws_region
@@ -52,7 +52,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     aws.elastic_ip = true
 
     aws.tags = {
-      'Name' => 'docker-kafka'
+      'Name' => 'elk'
     }
 
     aws.user_data = File.read("user_data.txt")
@@ -62,6 +62,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     override.ssh.private_key_path = aws_private_key_path
   end
   
+  config.vm.provision "shell", path: 'dumbUbuntu.sh'
   config.vm.provision "shell", path: 'setup.sh'
   config.vm.provision "puppet",  manifest_file: "default.pp"
 end
